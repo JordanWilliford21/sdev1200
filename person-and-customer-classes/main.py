@@ -1,6 +1,6 @@
 #
-# Name
-# Date
+# Jordan Williford
+# 2/2
 # Person and Customer Classes Programming Project
 # SDEV 1200
 #
