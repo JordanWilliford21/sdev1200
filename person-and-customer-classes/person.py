@@ -6,26 +6,19 @@
 #
 
 # Use comments liberally throughout the program.
-
+# Define the Person class with data attributes.
 class Person:
-    def __init__(self, name, address, phone_number):
+    def __init__(self, name, address, telephone):
+        # Initialize the Person class attributes
         self.name = name
         self.address = address
-        self.phone_number = phone_number
+        self.telephone = telephone
 
-    def display_info(self):
-        return f"Name: {self.name}\nAddress: {self.address}\nPhone Number: {self.phone_number}"
-
-# Customer class definition (inherits from Person)
+# Define the Customer class, which is a subclass of Person
 class Customer(Person):
-    def __init__(self, name, address, phone_number, customer_number, mailing_list):
-        # Initialize attributes of the parent class
-        super().__init__(name, address, phone_number)
-        # Initialize additional attributes specific to Customer
+    def __init__(self, name, address, telephone, customer_number, on_mailing_list):
+        # Call the parent constructor to initialize Person attributes
+        super().__init__(name, address, telephone)
+        # Initialize additional attributes for the Customer class
         self.customer_number = customer_number
-        self.mailing_list = mailing_list
-
-    def display_customer_info(self):
-        mailing_status = "Yes" if self.mailing_list else "No"
-        return f"{self.display_info()}\nCustomer Number: {self.customer_number}\nMailing List: {mailing_status}"
-
+        self.on_mailing_list = on_mailing_list
