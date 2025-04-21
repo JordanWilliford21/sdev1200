@@ -1,18 +1,7 @@
-#
-# Name
-# Date
-# Population Database Programming Project
-# SDEV 1200
-#
-
-# Use comments liberally throughout the program.
 import sqlite3
 
-def connect_db():
-    return sqlite3.connect("cities.db")
-
 def display_menu():
-    print("\n--- City Population Database ---")
+    print("\nChoose an option:")
     print("1. Display cities sorted by population (ascending)")
     print("2. Display cities sorted by population (descending)")
     print("3. Display cities sorted by name")
@@ -20,47 +9,60 @@ def display_menu():
     print("5. Display average population")
     print("6. Display city with highest population")
     print("7. Display city with lowest population")
-    print("0. Exit")
+    print("8. Exit")
 
-def fetch_and_display(query, description):
-    with connect_db() as conn:
-        cursor = conn.cursor()
-        cursor.execute(query)
-        rows = cursor.fetchall()
-        print(f"\n{description}")
-        for row in rows:
-            print(row)
-
-def display_total_population():
-    with connect_db() as conn:
-        cursor = conn.cursor()
-        cursor.execute("SELECT SUM(Population) FROM Cities")
-        total = cursor.fetchone()[0]
-        print(f"\nTotal Population: {total}")
-
-def display_average_population():
-    with connect_db() as conn:
-        cursor = conn.cursor()
-        cursor.execute("SELECT AVG(Population) FROM Cities")
-        average = cursor.fetchone()[0]
-        print(f"\nAverage Population: {average:.2f}")
-
-def display_extreme_population(highest=True):
-    with connect_db() as conn:
-        cursor = conn.cursor()
-        if highest:
-            cursor.execute("SELECT CityName, Population FROM Cities ORDER BY Population DESC LIMIT 1")
-            label = "Highest"
-        else:
-            cursor.execute("SELECT CityName, Population FROM Cities ORDER BY Population ASC LIMIT 1")
-            label = "Lowest"
-        city = cursor.fetchone()
-        print(f"\n{label} Population City: {city[0]} ({city[1]})")
+def display_results(results):
+    for row in results:
+        print(f"CityID: {row[0]}, CityName: {row[1]}, Population: {row[2]}")
 
 def main():
+    conn = sqlite3.connect('cities.db')
+    cursor = conn.cursor()
+
     while True:
         display_menu()
-        choice = input("Enter your choice: ")
+        choice = input("Enter your choice (1-8): ")
 
-        if choice == "1":
-            fetch_and_display("SELECT CityName, Population FROM Cities ORDER BY Population ASC", "Cities by
+        if choice == '1':
+            cursor.execute("SELECT * FROM Cities ORDER BY Population ASC")
+            display_results(cursor.fetchall())
+
+        elif choice == '2':
+            cursor.execute("SELECT * FROM Cities ORDER BY Population DESC")
+            display_results(cursor.fetchall())
+
+        elif choice == '3':
+            cursor.execute("SELECT * FROM Cities ORDER BY CityName ASC")
+            display_results(cursor.fetchall())
+
+        elif choice == '4':
+            cursor.execute("SELECT SUM(Population) FROM Cities")
+            total = cursor.fetchone()[0]
+            print(f"Total Population: {total}")
+
+        elif choice == '5':
+            cursor.execute("SELECT AVG(Population) FROM Cities")
+            avg = cursor.fetchone()[0]
+            print(f"Average Population: {avg:.2f}")
+
+        elif choice == '6':
+            cursor.execute("SELECT * FROM Cities ORDER BY Population DESC LIMIT 1")
+            result = cursor.fetchone()
+            print(f"City with Highest Population: CityName: {result[1]}, Population: {result[2]}")
+
+        elif choice == '7':
+            cursor.execute("SELECT * FROM Cities ORDER BY Population ASC LIMIT 1")
+            result = cursor.fetchone()
+            print(f"City with Lowest Population: CityName: {result[1]}, Population: {result[2]}")
+
+        elif choice == '8':
+            print("Goodbye!")
+            break
+
+        else:
+            print("Invalid choice. Please enter a number between 1 and 8.")
+
+    conn.close()
+
+if __name__ == "__main__":
+    main()
