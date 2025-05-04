@@ -1,6 +1,6 @@
 #
-# Name
-# Date
+# Jordan Williford
+# 5/4/2025
 # Relational Database Programming Project
 # SDEV 1200
 #
